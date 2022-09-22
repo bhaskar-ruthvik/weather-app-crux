@@ -4,21 +4,63 @@ const app = express();
 const https = require("https");
 const bodyParser = require("body-parser");
 
+
 app.use(bodyParser.json());
 
-
-
+  let arr = []
 
 app.post("/api",function(req,res){
   
     const apiKey= process.env.API_KEY;
   const units = "metric";
  const location = req.body.text;
+ const locsplit = location.split(",")
+
+
+
+
+//  const search = new Search({
+//   location : location
+//  })
+//  search.save();
 //  console.log(location);
 
     // searchArr.push(location);
   
 //   console.log(searchArr);
+
+
+// let count=0;
+// function contains(arr,newt){
+//   for(let i=0;i<arr.length;i++){
+//     if(arr[i]==newt){
+//       return true
+//     }
+  
+//   }
+//   return false
+// }
+//   function addSearch(newSearch){
+ 
+//   if(prevSearch.length>5){
+//     prevSearch.shift()
+//   }
+//   console.log(contains(prevSearch,newSearch))
+//   if(!contains(prevSearch,newSearch)){
+//     prevSearch.push(newSearch);
+//   }
+    
+    function contains(arr,text){
+      const newarr = arr.filter((x)=>x==text)
+      if(newarr.length==0){
+        return false;
+      }
+      return true;
+    }
+  
+    
+//   }
+//   addSearch(locsplit[0]);
   const url = "https://api.openweathermap.org/data/2.5/weather?appid="+apiKey+"&q="+location+"&units="+units;
   https.get(url,function(response){
     console.log(response.statusCode);
@@ -39,7 +81,16 @@ app.post("/api",function(req,res){
     const humidity = weatherData.main.humidity;
     const windspeed = weatherData.wind.speed;
     const id = weatherData.weather[0].id;
-    res.json({"weatherid" : id,"temp" : tempRounded,"location" : name,"tempDec" : tempDec,"desc": desc,"min": mintemp,"max" : maxtemp});
+    if(arr.length<5 && !contains(arr,name)){
+      arr.push(name)
+    }
+    else if(arr.length==5 && !contains(arr,name)){
+      arr.shift()
+      arr.push(name)
+    }
+   
+
+    res.json({"weatherid" : id,"temp" : tempRounded,"location" : name,"tempDec" : tempDec,"desc": desc,"min": mintemp,"max" : maxtemp,"arr":arr});
 })}})})
 // app.post("/api",(req,res)=>{
 //     console.log("attempted post request");

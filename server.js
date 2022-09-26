@@ -2,7 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const https = require("https");
-const bodyParser = require("body-parser")
+const bodyParser = require("body-parser");
+const { raw } = require("body-parser");
 
 
 
@@ -11,7 +12,8 @@ app.use(bodyParser.json());
   let arr = []
 
 app.get("/",function(req,res){
-  res.write('<h1>The server is now running</h1>')
+  
+  res.send("Hello World")
 })
 
 app.post("/localpost",function(req,res){
@@ -162,5 +164,5 @@ app.post("/yourlocation",function(req,res){
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT,function(){
-  console.log("Server has started successfully");
+  console.log("Server has started successfully on port "+ PORT);
 })

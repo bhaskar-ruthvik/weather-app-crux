@@ -10,6 +10,10 @@ app.use(bodyParser.json());
 
   let arr = []
 
+app.get("/",function(req,res){
+  res.write('<h1>The server is now running</h1>')
+})
+
 app.post("/localpost",function(req,res){
   if(req.body.sug!=null){
     arr = req.body.sug.split(",")
